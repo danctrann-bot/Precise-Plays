@@ -1,1 +1,67 @@
-
+{
+  "sports": [
+    {
+      "name": "mlb",
+      "enabled": true,
+      "espn_sport": "baseball",
+      "espn_league": "mlb",
+      "kalshi_series": "KXMLB",
+      "typical_game_duration_minutes": 180,
+      "data_folder": "data/mlb"
+    },
+    {
+      "name": "wnba",
+      "enabled": false,
+      "espn_sport": "basketball",
+      "espn_league": "wnba",
+      "kalshi_series": "KXWNBA",
+      "typical_game_duration_minutes": 120,
+      "data_folder": "data/wnba"
+    },
+    {
+      "name": "nba",
+      "enabled": false,
+      "espn_sport": "basketball",
+      "espn_league": "nba",
+      "kalshi_series": "KXNBA",
+      "typical_game_duration_minutes": 120,
+      "data_folder": "data/nba"
+    },
+    {
+      "name": "nhl",
+      "enabled": false,
+      "espn_sport": "hockey",
+      "espn_league": "nhl",
+      "kalshi_series": "KXNHL",
+      "typical_game_duration_minutes": 150,
+      "data_folder": "data/nhl"
+    },
+    {
+      "name": "nfl",
+      "enabled": false,
+      "espn_sport": "football",
+      "espn_league": "nfl",
+      "kalshi_series": "KXNFL",
+      "typical_game_duration_minutes": 180,
+      "data_folder": "data/nfl"
+    },
+    {
+      "name": "soccer",
+      "enabled": false,
+      "espn_sport": "soccer",
+      "espn_league": "eng.1",
+      "kalshi_series": "KXSOCCER",
+      "typical_game_duration_minutes": 105,
+      "data_folder": "data/soccer"
+    },
+    {
+      "name": "tennis",
+      "enabled": false,
+      "espn_sport": "tennis",
+      "espn_league": "atp",
+      "kalshi_series": "KXTENNIS",
+      "typical_game_duration_minutes": 120,
+      "data_folder": "data/tennis"
+    }
+  ]
+}
