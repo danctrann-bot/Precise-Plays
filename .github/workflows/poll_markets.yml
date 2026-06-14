@@ -1,1 +1,63 @@
+name: Poll MLB Markets
 
+on:
+  schedule:
+    # Opening line - runs at 9am ET daily
+    - cron: '0 14 * * *'
+    # 6 hour checkpoint
+    - cron: '0 18 * * *'
+    # 2 hour checkpoint  
+    - cron: '0 22 * * *'
+    # 1 hour checkpoint
+    - cron: '0 23 * * *'
+    # Every 15 minutes in final hour before typical first pitch (6:40-7:10 ET)
+    - cron: '40,55 23 * * *'
+    - cron: '10,25,40,55 0 * * *'
+  workflow_dispatch:
+    inputs:
+      checkpoint:
+        description: 'Checkpoint label'
+        required: false
+        default: 'manual'
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests cryptography
+
+      - name: Set checkpoint label
+        id: label
+        run: |
+          HOUR=$(date -u +%H)
+          MIN=$(date -u +%M)
+          if [ "$HOUR" = "14" ]; then echo "CHECKPOINT=opening" >> $GITHUB_ENV
+          elif [ "$HOUR" = "18" ]; then echo "CHECKPOINT=6hr" >> $GITHUB_ENV
+          elif [ "$HOUR" = "22" ]; then echo "CHECKPOINT=2hr" >> $GITHUB_ENV
+          elif [ "$HOUR" = "23" ] && [ "$MIN" = "00" ]; then echo "CHECKPOINT=1hr" >> $GITHUB_ENV
+          else echo "CHECKPOINT=15min" >> $GITHUB_ENV
+          fi
+
+      - name: Run poll script
+        env:
+          KALSHI_KEY_ID: ${{ secrets.KALSHI_KEY_ID }}
+          KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY }}
+        run: python scripts/poll_kalshi.py
+
+      - name: Commit data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Data: ${{ env.CHECKPOINT }} $(date -u +'%Y-%m-%d %H:%M')"
+          git push
